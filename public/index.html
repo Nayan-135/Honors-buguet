@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budgeting Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Section: Form -->
+        <div class="left-section">
+            <h1>Budgeting Form</h1>
+            <form id="budgetForm">
+                <label for="category">Category:</label>
+                <select id="category" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Grocery">Grocery</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                </select>
+
+                <label for="subcategory">Sub-category:</label>
+                <select id="subcategory" required>
+                    <option value="" disabled selected>Select Sub-category</option>
+                </select>
+
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" required>
+
+                <label for="mrp">MRP:</label>
+                <input type="number" id="mrp" step="0.01" required>
+
+                <label for="cost">Cost:</label>
+                <input type="number" id="cost" step="0.01" required>
+
+                <label for="lastYearBudget">Last Year Budget:</label>
+                <input type="number" id="lastYearBudget" step="0.01" required>
+
+                <label for="comment">Comment:</label>
+                <textarea id="comment" maxlength="500" rows="5" required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- Right Section: Table -->
+        <div class="right-section">
+            <h2>Budget Data</h2>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Sub-category</th>
+                        <th>Product Name</th>
+                        <th>MRP</th>
+                        <th>Cost</th>
+                        <th>Last Year Budget</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("budgetForm");
+            const subcategorySelect = document.getElementById("subcategory");
+            const tableBody = document.querySelector("#dataTable tbody");
+
+            const subcategories = {
+                Grocery: ["Fruits", "Vegetables", "Snacks"],
+                Electronics: ["Mobile", "Laptop", "Accessories"],
+                Clothing: ["Men", "Women", "Kids"],
+            };
+
+            // Populate subcategories based on selected category
+            document.getElementById("category").addEventListener("change", (e) => {
+                const category = e.target.value;
+                subcategorySelect.innerHTML = '<option value="" disabled selected>Select Sub-category</option>';
+                if (subcategories[category]) {
+                    subcategories[category].forEach((sub) => {
+                        const option = document.createElement("option");
+                        option.value = sub;
+                        option.textContent = sub;
+                        subcategorySelect.appendChild(option);
+                    });
+                }
+            });
+
+            // Handle form submission
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const data = {
+                    category: document.getElementById("category").value,
+                    subcategory: document.getElementById("subcategory").value,
+                    productName: document.getElementById("productName").value,
+                    mrp: document.getElementById("mrp").value,
+                    cost: document.getElementById("cost").value,
+                    lastYearBudget: document.getElementById("lastYearBudget").value,
+                    comment: document.getElementById("comment").value,
+                };
+
+                // Add data to the table
+                const row = tableBody.insertRow();
+                Object.values(data).forEach((value) => {
+                    const cell = row.insertCell();
+                    cell.textContent = value;
+                });
+
+                form.reset();
+            });
+        });
+    </script>
+</body>
+</html>
